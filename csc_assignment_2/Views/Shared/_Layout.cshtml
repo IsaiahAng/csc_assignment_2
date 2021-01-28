@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - csc_assignment_2</title>
+    <title>
+        @ViewData["Title"] - csc_assignment_2
+    </title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -15,6 +17,19 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var userAuthorized = @User.Identity.IsAuthenticated.ToString().ToLower();
+            console.log(userAuthorized)
+             if (userAuthorized == false) {
+             console.log("here");
+            $('#sub').css("display","none");
+          }
+        });
+
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -26,13 +41,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">csc_assignment_2</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">The Life Time Talent</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+
+
+                    <li style="float:right"><partial name="_LoginPartial.cshtml" /></li>
+                    <li><a asp-area="" asp-controller="Payment" asp-action="" id="sub">Subscription</a></li>
+                    <li><a asp-area="" asp-controller="Payment" asp-action="CustomerPortal" id="sub">View Subscription</a></li>
+
                 </ul>
             </div>
         </div>
@@ -70,5 +91,7 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+    @RenderSection("Styles", required: false)
+
 </body>
 </html>
