@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @{string data = ViewBag.Message;
+    }
     <title>
         @ViewData["Title"] - csc_assignment_2
     </title>
@@ -24,9 +26,12 @@
             var userAuthorized = @User.Identity.IsAuthenticated.ToString().ToLower();
             console.log(userAuthorized)
              if (userAuthorized == false) {
-             console.log("here");
             $('#sub').css("display","none");
-          }
+            }
+            if ("@data" == "Premium") {
+                $('#sub').css("display", "none");
+
+            }
         });
 
     </script>
@@ -52,7 +57,7 @@
 
                     <li style="float:right"><partial name="_LoginPartial.cshtml" /></li>
                     <li><a asp-area="" asp-controller="Payment" asp-action="" id="sub">Subscription</a></li>
-                    <li><a asp-area="" asp-controller="Payment" asp-action="CustomerPortal" id="sub">View Subscription</a></li>
+                    @*<li><a asp-area="" asp-controller="Payment" asp-action="CustomerPortal" id="sub">View Subscription</a></li>*@
 
                 </ul>
             </div>
