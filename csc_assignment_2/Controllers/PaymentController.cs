@@ -106,8 +106,8 @@ namespace csc_assignment_2.Controllers
                 }
 
                 cm.SaveDetails();
-                //return LocalRedirect("/Home/Index");
-                return View("SubscribeResult");
+                return LocalRedirect("/Home/Index");
+                //return View("SubscribeResult");
 
             }
             catch (Exception e)

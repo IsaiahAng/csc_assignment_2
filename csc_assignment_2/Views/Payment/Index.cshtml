@@ -4,7 +4,10 @@
 }
 
 
-
+@using Microsoft.AspNetCore.Identity
+@using csc_assignment_2.Areas.Identity.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 <h2>Subscription Plan</h2>
 
 <form asp-controller="Payment" asp-action="Subscribe" method="post" id="payment-form" style="width:100%;">
@@ -25,7 +28,7 @@
                 Email
             </label>
             <div style="width:100%;">
-                <input type="email" name="email" id="email" required />
+                <input type="email" name="email" id="email" value="@UserManager.GetUserName(User)" readonly required />
             </div>
         </div>
         <div class="form-row">
@@ -33,7 +36,7 @@
                 Plan
             </label>
             <div style="width:100%;">
-                <input type="radio" name="plan" id="planBasic" value="freePlan" checked /><label for="planBasic">Free Plan</label><br />
+                @*<input type="radio" name="plan" id="planBasic" value="freePlan" checked /><label for="planBasic">Free Plan</label><br />*@
                 <input type="radio" name="plan" id="planPremium" value="premiumPlan" /><label for="planPremium">Premium Plan</label><br />
 
                 @*<input type="radio" name="plan" id="planYearly" value="Yearly" /><label for="planYearly">Yearly</label>*@
