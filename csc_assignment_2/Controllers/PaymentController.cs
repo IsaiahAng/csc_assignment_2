@@ -82,6 +82,7 @@ namespace csc_assignment_2.Controllers
 
                 var subscriptionService = new SubscriptionService();
                 var subscription = subscriptionService.Create(subscriptionOptions);
+                DateTime dateTime = DateTime.UtcNow.Date;
 
 
 
@@ -106,6 +107,8 @@ namespace csc_assignment_2.Controllers
                 }
 
                 cm.SaveDetails();
+
+
                 return LocalRedirect("/Home/Index");
                 //return View("SubscribeResult");
 
@@ -143,6 +146,9 @@ namespace csc_assignment_2.Controllers
                 {
                     case "charge.succeeded":
                         cm.RecordChargeStatus("succeed", customer_id);
+                        DateTime dt = DateTime.UtcNow.Date;
+
+                        cm.LastPaid(dt.ToString("d"), customer_id);
                         break;
                     case "charge.failed":
                         cm.RecordChargeStatus("failed", customer_id);
