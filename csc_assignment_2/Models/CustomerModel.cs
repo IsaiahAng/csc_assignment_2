@@ -58,6 +58,16 @@ namespace csc_assignment_2.Models
             con.Close();
             return i;
         }
+        public int LastPaid(string date, string customer_id)
+        {
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "UPDATE Customer set last_paid = '" + date + "' WHERE customer_id = '" + customer_id + "'";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            int i = cmd.ExecuteNonQuery();
+            con.Close();
+            return i;
+        }
         public string getUserData(string email)
         {
             SqlConnection con = new SqlConnection(GetConStr.ConString());
