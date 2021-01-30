@@ -93,14 +93,14 @@ namespace csc_assignment_2.Controllers
                 cm.subscription_status = subscription.Status;
                 if (planId == "price_1IDVJ4HQbClkzxezOyceDztZ")
                 {
-                    cm.free = "True";
+                    //cm.free = "True";
                     cm.premium = "False";
                     cm.SaveIntoUser("Free", email);
 
                 }
                 else
                 {
-                    cm.free = "False";
+                    //cm.free = "False";
                     cm.premium = "True";
                     cm.SaveIntoUser("Premium", email);
 
@@ -118,7 +118,7 @@ namespace csc_assignment_2.Controllers
                 cm.customer_id = "not-valid";
                 cm.email = email.ToString();
                 cm.subscription_status = "not-valid";
-                cm.free = null;
+                //cm.free = null;
                 cm.premium = null;
                 cm.SaveDetails();
 
@@ -161,24 +161,24 @@ namespace csc_assignment_2.Controllers
 
                         break;
 
-                    case "customer.subscription.updated":
-                        var subUp = stripeEvent.Data.Object as Subscription;
+                    //case "customer.subscription.updated":
+                    //    var subUp = stripeEvent.Data.Object as Subscription;
 
-                        cm = new CustomerModel();
-                        //var result = cm.getDetailsWithId("cus_Ihi5ctmRFKeQ6X");
-                        //var result = "True";
-                        if (global_plan_id == "price_1IDVJ4HQbClkzxezOyceDztZ")
-                        {
-                            cm.PlanChange("premium", customer_id);
-                            global_plan_id = "price_1IDVKDHQbClkzxezYq9YKGeA";
-                        }
-                        else
-                        {
-                            cm.PlanChange("free", customer_id);
-                            global_plan_id = "price_1IDVJ4HQbClkzxezOyceDztZ";
+                    //    cm = new CustomerModel();
+                    //    //var result = cm.getDetailsWithId("cus_Ihi5ctmRFKeQ6X");
+                    //    //var result = "True";
+                    //    if (global_plan_id == "price_1IDVJ4HQbClkzxezOyceDztZ")
+                    //    {
+                    //        cm.PlanChange("premium", customer_id);
+                    //        global_plan_id = "price_1IDVKDHQbClkzxezYq9YKGeA";
+                    //    }
+                    //    else
+                    //    {
+                    //        cm.PlanChange("free", customer_id);
+                    //        global_plan_id = "price_1IDVJ4HQbClkzxezOyceDztZ";
 
-                        }
-                        break;
+                    //    }
+                    //    break;
 
 
                 }

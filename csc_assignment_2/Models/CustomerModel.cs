@@ -15,22 +15,21 @@ namespace csc_assignment_2.Models
         public string email { get; set; }
         public string subscription_status { get; set; }
         public string charge_status { get; set; }
-        public string free { get; set; }
+        //public string free { get; set; }
         public string premium { get; set; }
 
         public CustomerModel() { }
-        public CustomerModel(string customer_id, string email, string subscription_status, string free, string premium)
+        public CustomerModel(string customer_id, string email, string subscription_status, string premium)
         {
             this.customer_id = customer_id;
             this.email = email;
             this.subscription_status = subscription_status;
-            this.free = free;
             this.premium = premium;
         }
         public int SaveDetails()
         {
             SqlConnection con = new SqlConnection(GetConStr.ConString());
-            string query = "INSERT INTO Customer(customer_id, email, subscription_status, free, premium) values ('" + customer_id + "','" + email + "','" + subscription_status + "','" + free + "','" + premium + "')";
+            string query = "INSERT INTO Customer(customer_id, email, subscription_status, premium) values ('" + customer_id + "','" + email + "','" + subscription_status + "','" + premium + "')";
             SqlCommand cmd = new SqlCommand(query, con);
             con.Open();
             int i = cmd.ExecuteNonQuery();
@@ -102,25 +101,25 @@ namespace csc_assignment_2.Models
             con.Close();
             return result;
         }
-        public int PlanChange(string cond, string customer_id)
-        {
-            SqlConnection con = new SqlConnection(GetConStr.ConString());
-            string query = "";
-            if (cond == "free")
-            {
-                query = "UPDATE Customer set subscription_status = 'active', free = 'True', premium = 'False' WHERE customer_id = '" + customer_id + "'";
-            }
-            else
-            {
-                query = "UPDATE Customer set subscription_status = 'active', free = 'False', premium = 'True' WHERE customer_id = '" + customer_id + "'";
-            }
+        //public int PlanChange(string cond, string customer_id)
+        //{
+        //    SqlConnection con = new SqlConnection(GetConStr.ConString());
+        //    string query = "";
+        //    if (cond == "free")
+        //    {
+        //        query = "UPDATE Customer set subscription_status = 'active', free = 'True', premium = 'False' WHERE customer_id = '" + customer_id + "'";
+        //    }
+        //    else
+        //    {
+        //        query = "UPDATE Customer set subscription_status = 'active', free = 'False', premium = 'True' WHERE customer_id = '" + customer_id + "'";
+        //    }
 
-            SqlCommand cmd = new SqlCommand(query, con);
-            con.Open();
-            int i = cmd.ExecuteNonQuery();
-            con.Close();
-            return i;
-        }
+        //    SqlCommand cmd = new SqlCommand(query, con);
+        //    con.Open();
+        //    int i = cmd.ExecuteNonQuery();
+        //    con.Close();
+        //    return i;
+        //}
         public int PlanRemove(string customer_id)
         {
             SqlConnection con = new SqlConnection(GetConStr.ConString());
