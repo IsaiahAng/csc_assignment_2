@@ -1,5 +1,7 @@
-﻿using csc_assignment_2.Models;
+﻿using csc_assignment_2.Areas.Identity.Data;
+using csc_assignment_2.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Stripe;
@@ -13,8 +15,11 @@ using System.Threading.Tasks;
 
 namespace csc_assignment_2.Controllers
 {
+
     public class PaymentController : Controller
     {
+
+        private readonly UserManager<ApplicationUser> _userManager;
         public static string customer_id { get; set; }
         public static string global_plan_id { get; set; }
 
@@ -23,10 +28,12 @@ namespace csc_assignment_2.Controllers
         {
             return View();
         }
-        public PaymentController(IConfiguration configuration)
+        public PaymentController(IConfiguration configuration, UserManager<ApplicationUser> userManager)
         {
             _configuration = configuration;
             StripeConfiguration.ApiKey = "sk_test_51HtmObHQbClkzxezsIKa0GNcvyKMngwztyFvlxirWE6QW4YKGADejt1ay8rTZqY4VvBu8a4aSTgYpNMtpLHJVBpC00P6J1uOX3";
+            _userManager = userManager;
+
 
         }
 
@@ -91,6 +98,7 @@ namespace csc_assignment_2.Controllers
                 cm.customer_id = subscription.CustomerId;
                 cm.email = email.ToString();
                 cm.subscription_status = subscription.Status;
+                cm.customer_user_id = _userManager.GetUserId(HttpContext.User);
                 if (planId == "price_1IDVJ4HQbClkzxezOyceDztZ")
                 {
                     //cm.free = "True";
