@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,6 +40,12 @@ namespace csc_assignment_2.Controllers
                 return BadRequest(new { message = "Talent cannot be empty!" });
             }
             repository.Add(talent);
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "INSERT INTO Talent(Name, ShortName, Reknown, Bio) values ('" + talent.Name + "','" + talent.ShortName + "','" + talent.Reknown + "','" + talent.Bio + "')";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
             return Ok(talent);
         }
 
