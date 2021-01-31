@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using csc_assignment_2.Areas.Identity.Data;
 using System.Data.SqlClient;
 using System.Data;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime.CredentialManagement;
+using Amazon.Runtime;
+using Amazon;
 
 namespace csc_assignment_2.Controllers
 {
@@ -23,6 +28,8 @@ namespace csc_assignment_2.Controllers
         {
             ViewBag.userid = _userManager.GetUserId(HttpContext.User);
             string plan = getUserData(_userManager.GetUserName(HttpContext.User));
+            // Store Current Logged user into DynamoDb
+            //storeSession(_userManager.GetUserName(HttpContext.User));
             ViewBag.Message = plan;
             return View();
         }
@@ -55,7 +62,7 @@ namespace csc_assignment_2.Controllers
         public string getUserData(string email)
         {
             SqlConnection con = new SqlConnection(GetConStr.ConString());
-            string query = "SELECT SubPlan FROM AspNetUsers WHERE Email = '" + email + "'";
+            string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
             string result = "";
             SqlCommand cmd = new SqlCommand(query, con);
             con.Open();
@@ -63,11 +70,41 @@ namespace csc_assignment_2.Controllers
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
             {
+                System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
                 result = dr["SubPlan"].ToString();
 
             }
             con.Close();
             return result;
         }
+        //public void storeSession(string email)
+        //{
+        //    var credentials = new BasicAWSCredentials("AKIAZ4FDJ5SPKEP54XUT", "/D5JtdPsUWBMbJ108z/jbiHR7S/z4bXnINxP2p61");
+
+        //    var client = new AmazonDynamoDBClient(credentials, RegionEndpoint.USEast1);
+        //    SqlConnection con = new SqlConnection(GetConStr.ConString());
+        //    string query = "SELECT * FROM Customer WHERE email = '" + email + "'";
+        //    SqlCommand cmd = new SqlCommand(query, con);
+        //    con.Open();
+        //    cmd.ExecuteNonQuery();
+        //    SqlDataReader dr = cmd.ExecuteReader();
+        //    while (dr.Read())
+        //    {
+        //        var request1 = new PutItemRequest
+        //        {
+        //            TableName = "Customer",
+        //            Item = new Dictionary<string, AttributeValue>
+        //            {
+        //                {"customer_id", new AttributeValue {S = dr["customer_id"].ToString()} },
+        //                {"email", new AttributeValue {S = dr["email"].ToString()} },
+        //                {"subscription_status", new AttributeValue {S = dr["subscription_status"].ToString()} },
+        //                {"charge_status", new AttributeValue {S = dr["charge_status"].ToString()} },
+        //                {"premium", new AttributeValue {S = dr["premium"].ToString()} },
+        //                {"customer_user_id", new AttributeValue {S = dr["customer_user_id"].ToString()} }
+        //            }
+        //        };
+        //        client.PutItemAsync(request1);
+        //    }
+        //}
     }
 }
