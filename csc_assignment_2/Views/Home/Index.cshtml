@@ -6,9 +6,10 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @section Scripts
-{
+    {
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script id="dsq-count-scr" src="//csctltt.disqus.com/count.js" async></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc1.min.js"></script>
 
     <script>
         $('#search').keyup(function () {
@@ -45,7 +46,7 @@
                         output += '<img src=' + urlForCloudImage + val.shortName + "_tn.jpg alt=" + val.name + '" />';
                         output += '<p>' + val.bio + '</p>';
                         @{string data = ViewBag.Message;
-                        }       
+                        }
                         console.log("@data");
                         if ("@data" == 'Premium') {
                                             output += `<button id="btnComment" class="btn btn-success pull-right" data-toggle="modal" data-target="#disqusModal" value=${val.id}><i class="fas fa-comments "></i>Leave a comment</button>`;
@@ -141,7 +142,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="addName">Name</label>
                         <div class="col-md-4">
-                            <input style="width: 350%" maxlength="1000" id="addName" name="addName" type="text" placeholder="Barot Bellingham" class="form-control input-md" required="">
+                            <input style="width: 200%" maxlength="1000" id="addName" name="addName" type="text" placeholder="Barot Bellingham" class="form-control input-md" required="">
 
                         </div>
                     </div>
@@ -150,7 +151,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="addShortName">Short Name</label>
                         <div class="col-md-4">
-                            <input style="width: 350%" maxlength="1000" id="addShortName" name="addShortName" type="text" placeholder="Barot_Bellingham" class="form-control input-md" required="">
+                            <input style="width: 200%" maxlength="1000" id="addShortName" name="addShortName" type="text" placeholder="Barot_Bellingham" class="form-control input-md" required="">
 
                         </div>
                     </div>
@@ -159,7 +160,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="addReknown">Reknown</label>
                         <div class="col-md-4">
-                            <input style="width: 350%" maxlength="1000" id="addReknown" name="addReknown" type="text" placeholder="Best F1 Driver" class="form-control input-md" required="">
+                            <input style="width: 200%" maxlength="1000" id="addReknown" name="addReknown" type="text" placeholder="Best F1 Driver" class="form-control input-md" required="">
 
                         </div>
                     </div>
@@ -168,7 +169,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="addImage">Link to Image</label>
                         <div class="col-md-4">
-                            <input style="width: 350%" maxlength="1000" id="addImage" name="addImage" type="text" placeholder="http://placehold.it/160x160" class="form-control input-md" required="">
+                            <input style="width: 200%" maxlength="1000" id="addImage" name="addImage" type="text" placeholder="http://placehold.it/160x160" class="form-control input-md" required="">
                             @*<input type="file" name="file" id="file" value="dataFile" required="">
                                 <button onclick="uploadFile()">Upload to S3</button>*@
                         </div>
@@ -178,7 +179,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="addBio">Bio</label>
                         <div class="col-md-4">
-                            <textarea style="width: 350%" maxlength="10000" rows="12" placeholder="Description" class="form-control" id="addBio" name="addBio"></textarea>
+                            <textarea style="width: 200%" maxlength="10000" rows="12" placeholder="Description" class="form-control" id="addBio" name="addBio"></textarea>
                         </div>
                     </div>
 
@@ -305,49 +306,162 @@
 <div id="disqus_thread"></div>
 
 <div id="update"></div>
-<script>
-    //$(window).on('load', function () {
-    //    $('#btnComment').on('click', function () {
-    //        console.log(this.val())
-    //        loadDisqus(this.val());
-    //    });
-    //    function loadDisqus(id) {
-    //        /**
-    //    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    //    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-    //        var disqus_config = function () {
-    //            this.page.url = "https://bc4fc685222a.ngrok.io/Home/Index";  // Replace PAGE_URL with your page's canonical URL variable
-    //            this.page.identifier = id; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    //        };
-    //        (function () { // DON'T EDIT BELOW THIS LINE
-    //            var d = document, s = d.createElement('script');
-    //            s.src = 'https://csctltt.disqus.com/embed.js';
-    //            s.setAttribute('data-timestamp', +new Date());
-    //            (d.head || d.body).appendChild(s);
-    //        })();
-    //    }
-    //});
-    //$(document).ready(function () {
 
-    //    $('#btnComment').on('click', function () {
-    //        console.log(this.val())
-    //        loadDisqus(this.val());
-    //    });
-    //    function loadDisqus(id) {
-    //        /**
-    //    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    //    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-    //        var disqus_config = function () {
-    //            this.page.url = "https://bc4fc685222a.ngrok.io/Home/Index";  // Replace PAGE_URL with your page's canonical URL variable
-    //            this.page.identifier = id; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    //        };
-    //        (function () { // DON'T EDIT BELOW THIS LINE
-    //            var d = document, s = d.createElement('script');
-    //            s.src = 'https://csctltt.disqus.com/embed.js';
-    //            s.setAttribute('data-timestamp', +new Date());
-    //            (d.head || d.body).appendChild(s);
-    //        })();
-    //    }
-    //});
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    function uploadImage() {
+        var preview = document.querySelector('img');
+        var file = document.querySelector('input[type=file]').files[0];
+        var reader = new FileReader();
+        reader.addEventListener("load", function () {
+            preview.src = reader.result;
+            var imageData = reader.result;
+            imageData = imageData.replace(/^data:image\/(.*);base64,/, '');
+            validateHuman(imageData)
+        }, false);
+        if (file) {
+            reader.readAsDataURL(file);
+            preview.style.display = "inherit";
+        }
+    }
+
+    async function validateHuman(base64) {
+        //event.preventDefault();
+        //var file = document.getElementById('img').files[0];
+        //const newBase64 = await toBase64(file)
+        //var base64result = newBase64.split(',')[1];
+
+        $(".analysis").empty();
+
+        axios.post("https://api.clarifai.com/v2/models/d02b4508df58432fbb84e800597b8959/outputs", JSON.stringify({
+            inputs: [{
+                data: { image: { base64: base64 } }
+            }]
+        }),
+            {
+                headers: {
+                    Authorization: "Key 5401ed155fba492199bd35c374c0dee6",
+                    "Content-Type": "application/json"
+                },
+            })
+            .then(function (response) {
+                console.log('axios', response.data)
+                var outputs = response.data.outputs
+                console.log(outputs[0].data)
+
+                $(".analysis").empty();
+
+                var modelSection = document.createElement('h4')
+                var modelText = document.createElement('p')
+
+                if (Object.keys(outputs[0].data).length === 0) {
+                    $(analysis).append(
+                        `<h4> This Image is not a human </h4>`
+                    )
+                } else if (outputs[0].data.regions.length > 0) {
+                    $(analysis).append(
+                        `<h4> This Image is a human </h4> \n` +
+                        `<p> Probability: ${outputs[0].data.regions[0].value} </p> \n` +
+                        `<button type="button" class="btn btn-success" onclick="uploadS3()"> Upload to S3 </button>`
+                    )
+                }
+
+            })
+            .catch(function (e) {
+                console.log(e)
+            })
+    }
+
+    function uploadS3() {
+        AWS.config.update({
+            accessKeyId: 'AKIAZ4FDJ5SPKEP54XUT',
+            secretAccessKey: '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',
+        });
+        AWS.config.region = 'us-east-1';
+
+        event.preventDefault();
+        console.log('test')
+        $(".analysis").empty();
+        $(analysis).append(
+            `<h4> Uploading... </h4>`
+        )
+
+        var bucketName = 'csc-assignment-1'
+
+        var s3 = new AWS.S3({
+            params: { Bucket: bucketName }
+        });
+        var file = document.getElementById('file').files[0];
+        console.log(file)
+        if (file) {
+            s3.putObject({
+                Key: file.name,
+                ContentType: file.type,
+                Body: file,
+                ACL: 'public-read'
+            },
+                function (err, data) {
+                    if (data !== null) {
+                        alert('Got it!');
+                        $(".analysis").empty();
+                        console.log(data)
+                        $(analysis).append(
+                            `<h4 id="myInput"> Upload Link: http://${bucketName}.s3.amazonaws.com/${file.name}</h4> \n` + '<button> Copy to clipboard </button>'
+                        )
+
+                    } else {
+                        alert("Upload failed!")
+                        console.log(err)
+                    }
+                });
+        }
+    }
+</script>
+
+<script>
+            //$(window).on('load', function () {
+            //    $('#btnComment').on('click', function () {
+            //        console.log(this.val())
+            //        loadDisqus(this.val());
+            //    });
+            //    function loadDisqus(id) {
+            //        /**
+            //    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            //    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+            //        var disqus_config = function () {
+            //            this.page.url = "https://bc4fc685222a.ngrok.io/Home/Index";  // Replace PAGE_URL with your page's canonical URL variable
+            //            this.page.identifier = id; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+            //        };
+            //        (function () { // DON'T EDIT BELOW THIS LINE
+            //            var d = document, s = d.createElement('script');
+            //            s.src = 'https://csctltt.disqus.com/embed.js';
+            //            s.setAttribute('data-timestamp', +new Date());
+            //            (d.head || d.body).appendChild(s);
+            //        })();
+            //    }
+            //});
+            //$(document).ready(function () {
+
+            //    $('#btnComment').on('click', function () {
+            //        console.log(this.val())
+            //        loadDisqus(this.val());
+            //    });
+            //    function loadDisqus(id) {
+            //        /**
+            //    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            //    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+            //        var disqus_config = function () {
+            //            this.page.url = "https://bc4fc685222a.ngrok.io/Home/Index";  // Replace PAGE_URL with your page's canonical URL variable
+            //            this.page.identifier = id; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+            //        };
+            //        (function () { // DON'T EDIT BELOW THIS LINE
+            //            var d = document, s = d.createElement('script');
+            //            s.src = 'https://csctltt.disqus.com/embed.js';
+            //            s.setAttribute('data-timestamp', +new Date());
+            //            (d.head || d.body).appendChild(s);
+            //        })();
+            //    }
+            //});
 
 </script>
