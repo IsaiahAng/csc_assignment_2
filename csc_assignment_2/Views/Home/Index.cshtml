@@ -47,7 +47,7 @@
                         //output += '<img src="images/'+ val.ShortName +'_tn.jpg" alt="'+ val.Name +'" />';
 
                         //get the image from cloud hosting
-                        output += '<img src=' + urlForCloudImage + val.shortName + "_tn.jpg alt=" + val.name + '" />';
+                        output += '<img src=' + val.img_Url + " alt=" + val.name + '" />';
                         output += '<p>' + val.bio + '</p>';
                         @{string data = ViewBag.Message;
                         }
