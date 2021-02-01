@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<form onsubmit="uploadFile()">
+    <label for="img"> Select image: </label>
+    <input type="file" id="img" name="img" accept="image/*" />
+    <input type="submit" />
+</form>
+
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    AWS.config.update({
+        accessKeyId: 'AKIAZ4FDJ5SPKEP54XUT',
+        secretAccessKey: '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',
+    });
+    AWS.config.region = 'us-east-1';
+
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
+    async function validateHuman() {
+        event.preventDefault();
+        var file = document.getElementById('img').files[0];
+        const newBase64 = await toBase64(file)
+        var base64result = newBase64.split(',')[1];
+
+        axios.post("https://api.clarifai.com/v2/models/d02b4508df58432fbb84e800597b8959/outputs", JSON.stringify({
+            inputs: [{
+                data: { image: { base64: base64result } }
+            }]
+        }),
+            {
+                headers: {
+                    Authorization: "Key 5401ed155fba492199bd35c374c0dee6",
+                    "Content-Type": "application/json"
+                },
+            })
+            .then(function (response) {
+                console.log('axios', response.data)
+            })
+            .catch(function (e) {
+                console.log(e)
+            })
+    }
+
+    function uploadFile() {
+        event.preventDefault();
+        console.log('test')
+        var s3 = new AWS.S3({
+            params: { Bucket: 'csc-assignment-1' }
+        });
+        var file = document.getElementById('img').files[0];
+        console.log(file)
+        if (file) {
+            s3.putObject({
+                Key: file.name,
+                ContentType: file.type,
+                Body: file,
+                ACL: 'public-read'
+            },
+                function (err, data) {
+                    if (data !== null) {
+                        alert('Got it!');
+
+                    } else {
+                        alert("Upload failed!")
+                        console.log(err)
+                    }
+                });
+        }
+    }
+</script>
