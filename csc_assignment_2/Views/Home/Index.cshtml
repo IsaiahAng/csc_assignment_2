@@ -33,7 +33,8 @@
                 var output = '<ul class="searchresults">';
                 $.each(data, function (key, val) {
                     //for debug
-                    //console.log(data);
+                    console.log(val.fix_Id);
+                    console.log(val.name);
                     //console.log(val.name.search(myExp));
                     if ((val.name.search(myExp) != -1) ||
                         (val.bio.search(myExp) != -1)) {
@@ -52,8 +53,8 @@
                                             output += `<button id="btnComment" class="btn btn-success pull-right" data-toggle="modal" data-target="#disqusModal" value=${val.id}><i class="fas fa-comments "></i>Leave a comment</button>`;
                         }
                         if (@User.Identity.IsAuthenticated.ToString().ToLower() == true) {
-                             output += '<button id="edit" class="btn btn-warning pull-right" data-toggle="modal" data-target="#editModal" data-talentid="' + val.id + '"><i class="fas fa-edit">Edit Talent</i></button>';
-                            output += '<button id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#deleteModal" data-talentid="' + val.id + '"><i class="fas fa-trash">Delete Talent</i></button>';
+                            output += '<button id="edit" class="btn btn-warning pull-right" data-toggle="modal" data-target="#editModal" data-talentid="' + val.id + '" data-fixid="' + val.fix_Id + '"><i class="fas fa-edit">Edit Talent</i></button>';
+                            output += '<button id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#deleteModal" data-talentid="' + val.id + '" data-fixid="' + val.fix_Id + '"><i class="fas fa-trash">Delete Talent</i></button>';
                         }
                              output += '</li>';
 
@@ -122,25 +123,6 @@
                 });
             });
         });
-        $(document).on("click", "#delete", function () {
-            var talentId = $(this).data('talentid');
-            console.log(talentId);
-            $('#btnDelete').click(function () {
-
-                $.ajax({
-                    url: 'http://localhost:62481/api/talents/' + talentId,
-                    cache: false,
-                    type: 'Delete',
-                    contentType: 'application/json; charset=utf-8',
-                    success: function () {
-                        $('#deleteModal').modal('hide');
-                        location.reload(true);
-                    }
-                }).done(function (data) {
-                    alert("Talent deleted successfully");
-                });
-            });
-        });
         $(document).on("click", "#AddNewTalent", function () {
 
             //to add
@@ -155,6 +137,7 @@
                         ShortName: $('#addShortName').val(),
                         Reknown: $('#addReknown').val(),
                         Bio: $('#addBio').val(),
+                        Img_Url: $('#addImage').val(), 
                     };
                     $.ajax({
                         url: 'http://localhost:62481/api/talents/',
@@ -169,7 +152,8 @@
 
         $(document).on("click", "#edit", function () {
             var talentId = $(this).data('talentid');
-            console.log(talentId);
+            var fixId = $(this).data('fixid');
+            console.log(fixId);
             $('#btnSave').click(function () {
                 alert("updating...");
                 if ($("#editName").val().trim().length == 0 || $("#editShortName").val().trim().length == 0 || $("#editReknown").val().trim().length == 0 || $("#editImage").val().trim().length == 0 || $("#editBio").val().trim().length == 0) {
@@ -177,17 +161,18 @@
                 }
                 else {
                     var talent = {
+                        Fix_Id: fixId,
                         Name: $('#editName').val(),
                         ShortName: $('#editShortName').val(),
                         Reknown: $('#editReknown').val(),
                         Bio: $('#editBio').val(),
-                        ImageLink: $('#editImage').val(),
-                        UpdatedBy: sessionStorage.getItem("username")
+                        Img_Url: $('#editImage').val(),
                     };
                     $.ajax({
                         url: 'http://localhost:62481/api/talents/' + talentId,
                         cache: false,
                         type: 'PUT',
+                        dataType: 'json',
                         contentType: 'application/json; charset=utf-8',
                         data: JSON.stringify(talent),
                         success: function () {

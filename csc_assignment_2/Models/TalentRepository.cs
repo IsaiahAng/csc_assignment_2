@@ -11,27 +11,27 @@ namespace csc_assignment_2.Models
         private List<Talent> talents = new List<Talent>();
         public Talent loadTalent = new Talent();
         private int _nextId = 1;
-        public List<Talent> getTalent()
-        {
-            SqlConnection con = new SqlConnection(GetConStr.ConString());
-            string query = "SELECT SubPlan FROM Talent";
-            List<Talent> result = new List<Talent>();
-            Talent aTalent = new Talent();
-            SqlCommand cmd = new SqlCommand(query, con);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            SqlDataReader dr = cmd.ExecuteReader();
-            while (dr.Read())
-            {
-                aTalent.Name = dr["Name"].ToString();
-                aTalent.ShortName = dr["ShortName"].ToString();
-                aTalent.Reknown = dr["Reknown"].ToString();
-                aTalent.Bio = dr["Bio"].ToString();
-                result.Add(aTalent);
-            }
-            con.Close();
-            return result;
-        }
+        //public List<Talent> getTalent()
+        //{
+        //    SqlConnection con = new SqlConnection(GetConStr.ConString());
+        //    string query = "SELECT SubPlan FROM Talent";
+        //    List<Talent> result = new List<Talent>();
+        //    Talent aTalent = new Talent();
+        //    SqlCommand cmd = new SqlCommand(query, con);
+        //    con.Open();
+        //    cmd.ExecuteNonQuery();
+        //    SqlDataReader dr = cmd.ExecuteReader();
+        //    while (dr.Read())
+        //    {
+        //        aTalent.Name = dr["Name"].ToString();
+        //        aTalent.ShortName = dr["ShortName"].ToString();
+        //        aTalent.Reknown = dr["Reknown"].ToString();
+        //        aTalent.Bio = dr["Bio"].ToString();
+        //        result.Add(aTalent);
+        //    }
+        //    con.Close();
+        //    return result;
+        //}
         public TalentRepository()
         {
             SqlConnection con = new SqlConnection(GetConStr.ConString());
@@ -44,10 +44,12 @@ namespace csc_assignment_2.Models
             while (dr.Read())
             {
                 Talent aTalent = new Talent();
+                aTalent.Id = int.Parse(dr["Id"].ToString());
                 aTalent.Name = dr["Name"].ToString();
                 aTalent.ShortName = dr["ShortName"].ToString();
                 aTalent.Reknown = dr["Reknown"].ToString();
                 aTalent.Bio = dr["Bio"].ToString();
+                aTalent.Img_Url = dr["Img_Url"].ToString();
                 result.Add(aTalent);
             }
             con.Close();
@@ -56,10 +58,14 @@ namespace csc_assignment_2.Models
             {
                 Add(new Talent
                 {
+                    Fix_Id = _nextId++,
+                    Id = result[i].Id,
                     Name = result[i].Name,
                     ShortName = result[i].ShortName,
                     Reknown = result[i].Reknown,
-                    Bio = result[i].Bio
+                    Bio = result[i].Bio,
+                    Img_Url = result[i].Img_Url
+
                 });
             }
             //Add(new Talent
@@ -102,7 +108,7 @@ namespace csc_assignment_2.Models
 
         public Talent Get(int id)
         {
-            return talents.Find(t => t.Id == id);
+            return talents.Find(t => t.Fix_Id == id);
         }
 
         public Talent Add(Talent talent)
@@ -111,7 +117,6 @@ namespace csc_assignment_2.Models
             {
                 throw new ArgumentNullException("talent");
             }
-            talent.Id = _nextId++;
             talents.Add(talent);
             return talent;
         }
@@ -127,7 +132,7 @@ namespace csc_assignment_2.Models
             {
                 throw new ArgumentNullException("talent");
             }
-            int index = talents.FindIndex(p => p.Id == talent.Id);
+            int index = talents.FindIndex(p => p.Fix_Id == talent.Fix_Id);
             if (index == -1)
             {
                 return false;

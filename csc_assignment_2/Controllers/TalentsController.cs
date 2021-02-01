@@ -42,7 +42,7 @@ namespace csc_assignment_2.Controllers
             repository.Add(talent);
             SqlConnection con = new SqlConnection(GetConStr.ConString());
             string a = talent.Name;
-            string query = "INSERT INTO Talent(Name, ShortName, Reknown, Bio) values ('" + talent.Name + "','" + talent.ShortName + "','" + talent.Reknown + "','" + talent.Bio + "')";
+            string query = "INSERT INTO Talent(Name, ShortName, Reknown, Bio, Img_Url) values ('" + talent.Name + "','" + talent.ShortName + "','" + talent.Reknown + "','" + talent.Bio + "','" + talent.Img_Url + "')";
             SqlCommand cmd = new SqlCommand(query, con);
             con.Open();
             cmd.ExecuteNonQuery();
@@ -57,8 +57,15 @@ namespace csc_assignment_2.Controllers
             {
                 return BadRequest(new { message = "Talent cannot be empty!" });
             }
-            talent.Id = id;
+            int i = talent.Fix_Id;
             repository.Update(talent);
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string a = talent.Name;
+            string query = "UPDATE Talent set Name = '" + talent.Name + "', ShortName ='" + talent.ShortName + "', Reknown = '" + talent.Reknown +"', Bio = '"+ talent.Bio+"', Img_Url = '"+ talent.Img_Url+ "' WHERE Id =" + id;
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
             return Ok(talent);
         }
 
@@ -66,6 +73,12 @@ namespace csc_assignment_2.Controllers
         public IActionResult DeleteTalent(int id)
         {
             repository.Remove(id);
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "DELETE FROM Talent WHERE Id='"+id+"';";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
             return Ok(new { message = "Deleted " + id });
         }
     }
