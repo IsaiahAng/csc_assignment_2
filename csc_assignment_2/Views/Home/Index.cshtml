@@ -7,17 +7,18 @@
 @inject UserManager<ApplicationUser> UserManager
 @section Scripts
 {
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script id="dsq-count-scr" src="//csctltt.disqus.com/count.js" async></script>
 
     <script>
-        $('#search').keyup(function () {
+
+        $(document).ready(function () {
+            $('#search').keyup(function () {
             //get data from json file
             //var urlForJson = "data.json";
 
 
             //get data from Restful web Service in development environment
-            var urlForJson = "https://4dff843d7a9a.ngrok.io/api/talents";
+            var urlForJson = "http://localhost:62481/api/talents";
 
             //get data from Restful web Service in production environment
             //var urlForJson= "http://csc123.azurewebsites.net/api/talents";
@@ -45,12 +46,16 @@
                         output += '<img src=' + urlForCloudImage + val.shortName + "_tn.jpg alt=" + val.name + '" />';
                         output += '<p>' + val.bio + '</p>';
                         @{string data = ViewBag.Message;
-                        }       
+                        }
                         console.log("@data");
                         if ("@data" == 'Premium') {
                                             output += `<button id="btnComment" class="btn btn-success pull-right" data-toggle="modal" data-target="#disqusModal" value=${val.id}><i class="fas fa-comments "></i>Leave a comment</button>`;
                         }
-                            output += '</li>';
+                        if (@User.Identity.IsAuthenticated.ToString().ToLower() == true) {
+                             output += '<button id="edit" class="btn btn-warning pull-right" data-toggle="modal" data-target="#editModal" data-talentid="' + val.id + '"><i class="fas fa-edit">Edit Talent</i></button>';
+                            output += '<button id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#deleteModal" data-talentid="' + val.id + '"><i class="fas fa-trash">Delete Talent</i></button>';
+                        }
+                             output += '</li>';
 
                     }
                 });
@@ -58,7 +63,6 @@
                 $('#update').html(output);
             }); //get JSON
         });
-        $(document).ready(function () {
             var userAuthorized = @User.Identity.IsAuthenticated.ToString().ToLower();
             if (userAuthorized == false) {
                 $('#AddNewTalent').hide();
@@ -70,7 +74,7 @@
             *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
             *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
                 var disqus_config = function () {
-                    this.page.url = "https://9105368fd9b9.ngrok.io/Home/Index";  // Replace PAGE_URL with your page's canonical URL variable
+                    this.page.url = "https://07db60576db5.ngrok.io/Home/Index";  // Replace PAGE_URL with your page's canonical URL variable
                     this.page.identifier = id; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
                 };
                 (function loadDisqus() { // DON'T EDIT BELOW THIS LINE
@@ -96,6 +100,108 @@
             //    (d.head || d.body).appendChild(s);
             //})();
         });
+
+    </script>
+    <script>
+        $(document).on("click", "#delete", function () {
+            var talentId = $(this).data('talentid');
+            console.log(talentId);
+            $('#btnDelete').click(function () {
+
+                $.ajax({
+                    url: 'http://localhost:62481/api/talents/' + talentId,
+                    cache: false,
+                    type: 'Delete',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function () {
+                        $('#deleteModal').modal('hide');
+                        location.reload(true);
+                    }
+                }).done(function (data) {
+                    alert("Talent deleted successfully");
+                });
+            });
+        });
+        $(document).on("click", "#delete", function () {
+            var talentId = $(this).data('talentid');
+            console.log(talentId);
+            $('#btnDelete').click(function () {
+
+                $.ajax({
+                    url: 'http://localhost:62481/api/talents/' + talentId,
+                    cache: false,
+                    type: 'Delete',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function () {
+                        $('#deleteModal').modal('hide');
+                        location.reload(true);
+                    }
+                }).done(function (data) {
+                    alert("Talent deleted successfully");
+                });
+            });
+        });
+        $(document).on("click", "#AddNewTalent", function () {
+
+            //to add
+            $('#btnAdd').click(function () {
+                alert("Data is being added to Database");
+                if ($("#addName").val().trim().length == 0 || $("#addShortName").val().trim().length == 0 || $("#addReknown").val().trim().length == 0 || $("#addImage").val().trim().length == 0 || $("#addBio").val().trim().length == 0) {
+                    alert('Please Fill In The Information!');
+                }
+                else {
+                    var talent = {
+                        Name: $('#addName').val(),
+                        ShortName: $('#addShortName').val(),
+                        Reknown: $('#addReknown').val(),
+                        Bio: $('#addBio').val(),
+                    };
+                    $.ajax({
+                        url: 'http://localhost:62481/api/talents/',
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(talent)
+                    });
+                }
+            });
+        });
+
+        $(document).on("click", "#edit", function () {
+            var talentId = $(this).data('talentid');
+            console.log(talentId);
+            $('#btnSave').click(function () {
+                alert("updating...");
+                if ($("#editName").val().trim().length == 0 || $("#editShortName").val().trim().length == 0 || $("#editReknown").val().trim().length == 0 || $("#editImage").val().trim().length == 0 || $("#editBio").val().trim().length == 0) {
+                    alert('Please Fill In The Information!');
+                }
+                else {
+                    var talent = {
+                        Name: $('#editName').val(),
+                        ShortName: $('#editShortName').val(),
+                        Reknown: $('#editReknown').val(),
+                        Bio: $('#editBio').val(),
+                        ImageLink: $('#editImage').val(),
+                        UpdatedBy: sessionStorage.getItem("username")
+                    };
+                    $.ajax({
+                        url: 'http://localhost:62481/api/talents/' + talentId,
+                        cache: false,
+                        type: 'PUT',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(talent),
+                        success: function () {
+                            $('#editModal').modal('hide');
+                            location.reload(true);
+                        }
+                    }).done(function (response) {
+                        alert("Data Update Successfully");
+                    });
+                }
+            });
+
+        });
+
 
     </script>
 }
@@ -305,49 +411,3 @@
 <div id="disqus_thread"></div>
 
 <div id="update"></div>
-<script>
-    //$(window).on('load', function () {
-    //    $('#btnComment').on('click', function () {
-    //        console.log(this.val())
-    //        loadDisqus(this.val());
-    //    });
-    //    function loadDisqus(id) {
-    //        /**
-    //    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    //    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-    //        var disqus_config = function () {
-    //            this.page.url = "https://bc4fc685222a.ngrok.io/Home/Index";  // Replace PAGE_URL with your page's canonical URL variable
-    //            this.page.identifier = id; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    //        };
-    //        (function () { // DON'T EDIT BELOW THIS LINE
-    //            var d = document, s = d.createElement('script');
-    //            s.src = 'https://csctltt.disqus.com/embed.js';
-    //            s.setAttribute('data-timestamp', +new Date());
-    //            (d.head || d.body).appendChild(s);
-    //        })();
-    //    }
-    //});
-    //$(document).ready(function () {
-
-    //    $('#btnComment').on('click', function () {
-    //        console.log(this.val())
-    //        loadDisqus(this.val());
-    //    });
-    //    function loadDisqus(id) {
-    //        /**
-    //    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    //    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-    //        var disqus_config = function () {
-    //            this.page.url = "https://bc4fc685222a.ngrok.io/Home/Index";  // Replace PAGE_URL with your page's canonical URL variable
-    //            this.page.identifier = id; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    //        };
-    //        (function () { // DON'T EDIT BELOW THIS LINE
-    //            var d = document, s = d.createElement('script');
-    //            s.src = 'https://csctltt.disqus.com/embed.js';
-    //            s.setAttribute('data-timestamp', +new Date());
-    //            (d.head || d.body).appendChild(s);
-    //        })();
-    //    }
-    //});
-
-</script>

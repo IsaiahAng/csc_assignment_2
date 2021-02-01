@@ -33,7 +33,7 @@ namespace csc_assignment_2.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddTalent(Talent talent)
+        public IActionResult AddTalent([FromBody] Talent talent)
         {
             if (talent == null)
             {
@@ -41,6 +41,7 @@ namespace csc_assignment_2.Controllers
             }
             repository.Add(talent);
             SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string a = talent.Name;
             string query = "INSERT INTO Talent(Name, ShortName, Reknown, Bio) values ('" + talent.Name + "','" + talent.ShortName + "','" + talent.Reknown + "','" + talent.Bio + "')";
             SqlCommand cmd = new SqlCommand(query, con);
             con.Open();
@@ -50,7 +51,7 @@ namespace csc_assignment_2.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult EditTalent(int id, Talent talent)
+        public IActionResult EditTalent(int id, [FromBody] Talent talent)
         {
             if (talent == null)
             {
