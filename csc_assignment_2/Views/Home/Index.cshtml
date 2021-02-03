@@ -18,7 +18,7 @@
 
 
             //get data from Restful web Service in development environment
-            var urlForJson = "http://localhost:62481/api/talents";
+                var urlForJson = "https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents";
 
             //get data from Restful web Service in production environment
             //var urlForJson= "http://csc123.azurewebsites.net/api/talents";
@@ -29,33 +29,37 @@
             var searchField = $('#search').val().toString();
             //console.log(searchField);
             var myExp = new RegExp(searchField, "i");
+            console.log(searchField);
+
             $.getJSON(urlForJson, function (data) {
 
                 var output = '<ul class="searchresults">';
                 $.each(data, function (key, val) {
                     //for debug
-                    console.log(val.fix_Id);
-                    console.log(val.name);
+                    //console.log(val.fix_Id);
+                    console.log(val.Name);
                     //console.log(val.name.search(myExp));
-                    if ((val.name.search(myExp) != -1) ||
-                        (val.bio.search(myExp) != -1)) {
+                    if ((val.Name.search(myExp) != -1) ||
+                        (val.Bio.search(myExp) != -1)) {
                         output += '<li>';
-                        output += '<h2>' + val.name + '</h2>';
+                        output += '<h2>' + val.Name + '</h2>';
                         //get the absolute path for local image
                         //output += '<img src="images/'+ val.ShortName +'_tn.jpg" alt="'+ val.Name +'" />';
 
                         //get the image from cloud hosting
-                        output += '<img src=' + urlForCloudImage + val.shortName + "_tn.jpg alt=" + val.name + '" />';
-                        output += '<p>' + val.bio + '</p>';
+                        output += '<img src=' + urlForCloudImage + val.ShortName + "_tn.jpg alt=" + val.Name + '" />';
+                        output += '<p>' + val.Bio + '</p>';
                         @{string data = ViewBag.Message;
                         }
                         console.log("@data");
                         if ("@data" == 'Premium') {
-                                            output += `<button id="btnComment" class="btn btn-success pull-right" data-toggle="modal" data-target="#disqusModal" value=${val.id}><i class="fas fa-comments "></i>Leave a comment</button>`;
+                                            output += `<button id="btnComment" class="btn btn-success pull-right" data-toggle="modal" data-target="#disqusModal" value=${val.Id}><i class="fas fa-comments "></i>Leave a comment</button>`;
                         }
                         if (@User.Identity.IsAuthenticated.ToString().ToLower() == true) {
-                            output += '<button id="edit" class="btn btn-warning pull-right" data-toggle="modal" data-target="#editModal" data-talentid="' + val.id + '" data-fixid="' + val.fix_Id + '"><i class="fas fa-edit">Edit Talent</i></button>';
-                            output += '<button id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#deleteModal" data-talentid="' + val.id + '" data-fixid="' + val.fix_Id + '"><i class="fas fa-trash">Delete Talent</i></button>';
+                            output += '<button id="edit" class="btn btn-warning pull-right" data-toggle="modal" data-target="#editModal" data-talentid="' + val.Id + '"><i class="fas fa-edit">Edit Talent</i></button>';
+                            output += '<button id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#deleteModal" data-talentid="' + val.Id + '"><i class="fas fa-trash">Delete Talent</i></button>';
+                            //output += '<button id="edit" class="btn btn-warning pull-right" data-toggle="modal" data-target="#editModal" data-talentid="' + val.id + '" data-fixid="' + val.fix_Id + '"><i class="fas fa-edit">Edit Talent</i></button>';
+                            //output += '<button id="delete" class="btn btn-danger pull-right" data-toggle="modal" data-target="#deleteModal" data-talentid="' + val.id + '" data-fixid="' + val.fix_Id + '"><i class="fas fa-trash">Delete Talent</i></button>';
                         }
                              output += '</li>';
 
@@ -172,8 +176,8 @@
 
         $(document).on("click", "#edit", function () {
             var talentId = $(this).data('talentid');
-            var fixId = $(this).data('fixid');
-            console.log(fixId);
+            //var fixId = $(this).data('fixid');
+            //console.log(fixId);
             $('#btnSave').click(function () {
                 alert("updating...");
                 if ($("#editName").val().trim().length == 0 || $("#editShortName").val().trim().length == 0 || $("#editReknown").val().trim().length == 0 || $("#editImage").val().trim().length == 0 || $("#editBio").val().trim().length == 0) {
@@ -181,7 +185,7 @@
                 }
                 else {
                     var talent = {
-                        Fix_Id: fixId,
+                        //Fix_Id: fixId,
                         Name: $('#editName').val(),
                         ShortName: $('#editShortName').val(),
                         Reknown: $('#editReknown').val(),
@@ -426,12 +430,12 @@
     <button id="AddNewTalent" type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><span class="glyphicon glyphicon-plus"></span> Add</button>
     @*<input type="file" name="file" id="file" value="dataFile" required="">*@
     @*<button onclick="uploadFile()">Upload to S3</button>*@
-    <div id="UploadPhoto" class="upload-photo">
+    @*<div id="UploadPhoto" class="upload-photo">
         <input type="file" name="file" id="file" value="dataFile" onchange="uploadImage()">
         <div class="photo-container">
             <img class="photo" src="" alt="Image preview">
         </div>
-    </div>
+    </div>*@
     <div class="analysis" id="analysis">
     </div>
 </div>

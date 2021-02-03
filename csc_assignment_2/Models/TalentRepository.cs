@@ -58,7 +58,7 @@ namespace csc_assignment_2.Models
             {
                 Add(new Talent
                 {
-                    Fix_Id = _nextId++,
+                    //Fix_Id = _nextId++,
                     Id = result[i].Id,
                     Name = result[i].Name,
                     ShortName = result[i].ShortName,
@@ -108,7 +108,7 @@ namespace csc_assignment_2.Models
 
         public Talent Get(int id)
         {
-            return talents.Find(t => t.Fix_Id == id);
+            return talents.Find(t => t.Id == id);
         }
 
         public Talent Add(Talent talent)
@@ -132,7 +132,7 @@ namespace csc_assignment_2.Models
             {
                 throw new ArgumentNullException("talent");
             }
-            int index = talents.FindIndex(p => p.Fix_Id == talent.Fix_Id);
+            int index = talents.FindIndex(p => p.Id == talent.Id);
             if (index == -1)
             {
                 return false;
