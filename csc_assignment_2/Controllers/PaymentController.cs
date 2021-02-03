@@ -16,6 +16,7 @@ namespace csc_assignment_2.Controllers
     public class PaymentController : Controller
     {
         public static string customer_id { get; set; }
+        public static string customerUserId { get; set; }
         public static string global_plan_id { get; set; }
 
         private readonly IConfiguration _configuration;
@@ -36,7 +37,7 @@ namespace csc_assignment_2.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Subscribe(string email, string plan, string stripeToken)
+        public ActionResult Subscribe(string email, string plan, string stripeToken, string customer_user_id)
         {
             CustomerModel cm = new CustomerModel();
             var customerOptions = new CustomerCreateOptions
@@ -51,6 +52,7 @@ namespace csc_assignment_2.Controllers
                 var customerService = new CustomerService();
                 var customer = customerService.Create(customerOptions);
                 customer_id = customer.Id;
+               
                 // Previous code in action
 
                 var planId = "";
@@ -91,6 +93,8 @@ namespace csc_assignment_2.Controllers
                 cm.customer_id = subscription.CustomerId;
                 cm.email = email.ToString();
                 cm.subscription_status = subscription.Status;
+                cm.customer_user_id = customer_user_id;
+                customerUserId = customer_user_id;
                 if (planId == "price_1IDVJ4HQbClkzxezOyceDztZ")
                 {
                     //cm.free = "True";
@@ -148,7 +152,7 @@ namespace csc_assignment_2.Controllers
                         cm.RecordChargeStatus("succeed", customer_id);
                         DateTime dt = DateTime.UtcNow.Date;
 
-                        cm.LastPaid(dt.ToString("d"), customer_id);
+                        cm.LastPaid(dt.ToString("d"), customerUserId);
                         break;
                     case "charge.failed":
                         cm.RecordChargeStatus("failed", customer_id);

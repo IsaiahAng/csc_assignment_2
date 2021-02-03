@@ -37,10 +37,12 @@
             </label>
             <div style="width:100%;">
                 @*<input type="radio" name="plan" id="planBasic" value="freePlan" checked /><label for="planBasic">Free Plan</label><br />*@
-                <input type="radio" name="plan" id="planPremium" value="premiumPlan" checked/><label for="planPremium">Premium Plan</label><br />
+                <input type="radio" name="plan" id="planPremium" value="premiumPlan" checked /><label for="planPremium">Premium Plan</label><br />
 
                 @*<input type="radio" name="plan" id="planYearly" value="Yearly" /><label for="planYearly">Yearly</label>*@
             </div>
+            <input hidden type="text" name="customer_user_id" id="customer_user_id" value="@UserManager.GetUserId(User)" /><br />
+
         </div>
         <button>Make Subscription</button>
     </div>
@@ -114,6 +116,7 @@
         hiddenInput.setAttribute('type', 'hidden');
         hiddenInput.setAttribute('name', 'stripeToken');
         hiddenInput.setAttribute('value', token.id);
+
         form.appendChild(hiddenInput);
 
         // Submit the form
