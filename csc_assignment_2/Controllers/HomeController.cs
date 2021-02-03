@@ -14,6 +14,7 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime.CredentialManagement;
 using Amazon.Runtime;
 using Amazon;
+using Microsoft.AspNetCore.Authorization;
 
 namespace csc_assignment_2.Controllers
 {
@@ -24,6 +25,7 @@ namespace csc_assignment_2.Controllers
         {
             _userManager = userManager;
         }
+
         public IActionResult Index()
         {
             ViewBag.userid = _userManager.GetUserId(HttpContext.User);

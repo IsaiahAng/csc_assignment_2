@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using csc_assignment_2.Data;
 
 namespace csc_assignment_2.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210203065052_AddLastPaid")]
+    partial class AddLastPaid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +42,8 @@ namespace csc_assignment_2.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("LastPaid")
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<DateTime>("LastPaid")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("LockoutEnabled");
 
