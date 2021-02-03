@@ -179,7 +179,7 @@
             console.log(fixId);
             $('#btnSave').click(function () {
                 alert("updating...");
-                if ($("#editName").val().trim().length == 0 || $("#editShortName").val().trim().length == 0 || $("#editReknown").val().trim().length == 0 || $("#editImage").val().trim().length == 0 || $("#editBio").val().trim().length == 0) {
+                if ($("#editName").val().trim().length == 0 || $("#editShortName").val().trim().length == 0 || $("#editReknown").val().trim().length == 0 || $("#editImg").val().trim().length == 0 || $("#editBio").val().trim().length == 0) {
                     alert('Please Fill In The Information!');
                 }
                 else {
@@ -189,14 +189,14 @@
                         ShortName: $('#editShortName').val(),
                         Reknown: $('#editReknown').val(),
                         Bio: $('#editBio').val(),
-                        Img_Url: $('#editImage').val(),
+                        Img_Url: $('#editImg').val(),
                     };
                     var talent2 = {
                         Name: $('#editName').val(),
                         ShortName: $('#editShortName').val(),
                         Reknown: $('#editReknown').val(),
                         Bio: $('#editBio').val(),
-                        Img_Url: $('#editImage').val(),
+                        Img_Url: $('#editImg').val(),
                     };
                     $.ajax({
                         url: 'http://localhost:62481/api/talents/' + talentId,
@@ -440,46 +440,51 @@
 
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="editName">Name</label>
-                        <div class="col-md-4">
-                            <input style="width: 350%" maxlength="1000" id="editName" name="editName" type="text" placeholder="" class="form-control input-md" required="">
+                        <label class="col-md-3 control-label" for="editName">Name</label>
+                        <div class="col-md-8">
+                            <input maxlength="1000" id="editName" name="editName" type="text" placeholder="" class="form-control input-md" required="">
 
                         </div>
                     </div>
 
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="editShortName">Short Name</label>
-                        <div class="col-md-4">
-                            <input style="width: 350%" maxlength="1000" id="editShortName" name="editShortName" type="text" placeholder="" class="form-control input-md" required="">
+                        <label class="col-md-3 control-label" for="editShortName">Short Name</label>
+                        <div class="col-md-8">
+                            <input maxlength="1000" id="editShortName" name="editShortName" type="text" placeholder="" class="form-control input-md" required="">
 
                         </div>
                     </div>
 
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="editReknown">Reknown</label>
-                        <div class="col-md-4">
-                            <input style="width: 350%" maxlength="1000" id="editReknown" name="editReknown" type="text" placeholder="" class="form-control input-md" required="">
+                        <label class="col-md-3 control-label" for="editReknown">Reknown</label>
+                        <div class="col-md-8">
+                            <input maxlength="1000" id="editReknown" name="editReknown" type="text" placeholder="" class="form-control input-md" required="">
 
                         </div>
                     </div>
 
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="editImage">Link to Image</label>
-                        <div class="col-md-4">
-                            <input style="width: 350%" maxlength="1000" id="editImage" name="editImage" type="text" placeholder="http://placehold.it/160x160" class="form-control input-md" required="">
-                            @*<input type="file" name="file" id="file" value="dataFile" required="">
-                                <button onclick="uploadFile()">Upload to S3</button>*@
+                        <label class="col-md-3 control-label" for="editImage">Link to Image</label>
+                        <div class="col-md-8">
+                            <input type="file" name="file" id="editFile" value="dataFile" required="" onchange="uploadImageToEditForm()" />
+                            <div id="editHelper">
+
+                            </div>
                         </div>
+                    </div>
+
+                     <div class="form-group">
+                        <input maxlength="1000" type="hidden" id="editImg" value="" />
                     </div>
 
                     <!-- Textarea -->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="editBio">Bio</label>
-                        <div class="col-md-4">
-                            <textarea style="width: 350%" maxlength="10000" rows="12" placeholder="Description" class="form-control" id="editBio" name="editBio"></textarea>
+                        <label class="col-md-3 control-label" for="editBio">Bio</label>
+                        <div class="col-md-8">
+                            <textarea maxlength="10000" rows="12" placeholder="Description" class="form-control" id="editBio" name="editBio"></textarea>
                         </div>
                     </div>
 
@@ -495,6 +500,94 @@
 
     </div>
 </div>
+
+<script>
+
+    function uploadImageToEditForm() {
+        $(helper).empty()
+        var file = document.getElementById("editFile").files[0];
+        var reader = new FileReader();
+        reader.addEventListener("load", function () {
+            var imageData = reader.result;
+            imageData = imageData.replace(/^data:image\/(.*);base64,/, '');
+            console.log(imageData);
+            validateEditImage(imageData)
+        }, false);
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function validateEditImage(base64) {
+        axios.post("https://api.clarifai.com/v2/models/d02b4508df58432fbb84e800597b8959/outputs", JSON.stringify({
+            inputs: [{
+                data: { image: { base64: base64 } }
+            }]
+        }),
+            {
+                headers: {
+                    Authorization: "Key 5401ed155fba492199bd35c374c0dee6",
+                    "Content-Type": "application/json"
+                },
+            })
+            .then(function (response) {
+                var outputs = response.data.outputs
+                console.log(outputs)
+
+                if (Object.keys(outputs[0].data).length === 0) {
+                    $(editHelper).append(
+                        `<h6> Image is not a human! </h6>`
+                    )
+                } else if (outputs[0].data.regions.length > 0) {
+                    uploadEditToS3()
+                    console.log('Uploaded')
+                }
+
+            })
+            .catch(function (e) {
+                console.log(e)
+            })
+    }
+
+    function uploadEditToS3() {
+        AWS.config.update({
+            accessKeyId: 'AKIAZ4FDJ5SPKEP54XUT',
+            secretAccessKey: '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',
+        });
+        AWS.config.region = 'us-east-1';
+
+        var bucketName = 'csc-assignment-1'
+
+        var s3 = new AWS.S3({
+            params: { Bucket: bucketName }
+        });
+        var file = document.getElementById('editFile').files[0];
+        if (file) {
+            s3.putObject({
+                Key: file.name,
+                ContentType: file.type,
+                Body: file,
+                ACL: 'public-read'
+            },
+                function (err, data) {
+                    if (data.RequestId !== undefined || data !== null) {
+                        console.log(data)
+                        $(editHelper).append(
+                            `<h6 id="myInput"> Image Uploaded. Link: http://${bucketName}.s3.amazonaws.com/${file.name}</h6>`
+                        )
+                        $(editImg).val(`http://${bucketName}.s3.amazonaws.com/${file.name}`)
+                        const button = document.getElementById('btnAdd')
+                        button.disabled = false
+                    } else {
+                        $(editHelper).append(
+                            `<h6 id="myInput"> Error Uploading to S3. Please upload again. </h6>`
+                        )
+                    }
+                });
+        }
+    }
+
+</script>
 
 <!--deleting talents-->
 <div id="deleteModal" class="modal fade" role="dialog">
