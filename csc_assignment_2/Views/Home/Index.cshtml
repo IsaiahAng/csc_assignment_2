@@ -30,6 +30,7 @@
             //console.log(searchField);
             var myExp = new RegExp(searchField, "i");
             $.getJSON(urlForJson, function (data) {
+
                 var output = '<ul class="searchresults">';
                 $.each(data, function (key, val) {
                     //for debug
@@ -110,7 +111,7 @@
             $('#btnDelete').click(function () {
 
                 $.ajax({
-                    url: 'http://localhost:62481/api/talents/' + talentId,
+                    url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents/' + talentId,
                     cache: false,
                     type: 'Delete',
                     contentType: 'application/json; charset=utf-8',
@@ -140,7 +141,14 @@
                         Img_Url: $('#addImage').val(), 
                     };
                     $.ajax({
-                        url: 'http://localhost:62481/api/talents/',
+                        url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents',
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(talent)
+                    });
+                    $.ajax({
+                        url: 'http://localhost:62481/api/talents',
                         type: 'post',
                         dataType: 'json',
                         contentType: 'application/json',
@@ -169,7 +177,7 @@
                         Img_Url: $('#editImage').val(),
                     };
                     $.ajax({
-                        url: 'http://localhost:62481/api/talents/' + talentId,
+                        url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents/' + talentId,
                         cache: false,
                         type: 'PUT',
                         dataType: 'json',

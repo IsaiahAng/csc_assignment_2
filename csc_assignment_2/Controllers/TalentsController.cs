@@ -40,13 +40,13 @@ namespace csc_assignment_2.Controllers
                 return BadRequest(new { message = "Talent cannot be empty!" });
             }
             repository.Add(talent);
-            SqlConnection con = new SqlConnection(GetConStr.ConString());
-            string a = talent.Name;
-            string query = "INSERT INTO Talent(Name, ShortName, Reknown, Bio, Img_Url) values ('" + talent.Name + "','" + talent.ShortName + "','" + talent.Reknown + "','" + talent.Bio + "','" + talent.Img_Url + "')";
-            SqlCommand cmd = new SqlCommand(query, con);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
+            //SqlConnection con = new SqlConnection(GetConStr.ConString());
+            //string a = talent.Name;
+            //string query = "INSERT INTO Talent(Name, ShortName, Reknown, Bio, Img_Url) values ('" + talent.Name + "','" + talent.ShortName + "','" + talent.Reknown + "','" + talent.Bio + "','" + talent.Img_Url + "')";
+            //SqlCommand cmd = new SqlCommand(query, con);
+            //con.Open();
+            //cmd.ExecuteNonQuery();
+            //con.Close();
             return Ok(talent);
         }
 
