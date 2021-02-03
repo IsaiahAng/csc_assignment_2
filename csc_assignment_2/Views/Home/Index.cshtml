@@ -111,7 +111,19 @@
             $('#btnDelete').click(function () {
 
                 $.ajax({
-                    url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents/' + talentId,
+                    url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents/?id=' + talentId,
+                    cache: false,
+                    type: 'Delete',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function () {
+                        $('#deleteModal').modal('hide');
+                        location.reload(true);
+                    }
+                }).done(function (data) {
+                    alert("Talent deleted successfully");
+                });
+                $.ajax({
+                    url: 'http://localhost:62481/api/talents/' + talentId,
                     cache: false,
                     type: 'Delete',
                     contentType: 'application/json; charset=utf-8',
@@ -176,8 +188,15 @@
                         Bio: $('#editBio').val(),
                         Img_Url: $('#editImage').val(),
                     };
+                    var talent2 = {
+                        Name: $('#editName').val(),
+                        ShortName: $('#editShortName').val(),
+                        Reknown: $('#editReknown').val(),
+                        Bio: $('#editBio').val(),
+                        Img_Url: $('#editImage').val(),
+                    };
                     $.ajax({
-                        url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents/' + talentId,
+                        url: 'http://localhost:62481/api/talents/' + talentId,
                         cache: false,
                         type: 'PUT',
                         dataType: 'json',
@@ -190,6 +209,21 @@
                     }).done(function (response) {
                         alert("Data Update Successfully");
                     });
+                    $.ajax({
+                        url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents/?id=' + talentId,
+                        cache: false,
+                        type: 'PUT',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(talent2),
+                        success: function () {
+                            $('#editModal').modal('hide');
+                            location.reload(true);
+                        }
+                    }).done(function (response) {
+                        alert("Data Update Successfully");
+                    });
+
                 }
             });
 

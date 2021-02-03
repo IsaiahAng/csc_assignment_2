@@ -59,13 +59,13 @@ namespace csc_assignment_2.Controllers
             }
             int i = talent.Fix_Id;
             repository.Update(talent);
-            SqlConnection con = new SqlConnection(GetConStr.ConString());
-            string a = talent.Name;
-            string query = "UPDATE Talent set Name = '" + talent.Name + "', ShortName ='" + talent.ShortName + "', Reknown = '" + talent.Reknown +"', Bio = '"+ talent.Bio+"', Img_Url = '"+ talent.Img_Url+ "' WHERE Id =" + id;
-            SqlCommand cmd = new SqlCommand(query, con);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
+            //SqlConnection con = new SqlConnection(GetConStr.ConString());
+            //string a = talent.Name;
+            //string query = "UPDATE Talent set Name = '" + talent.Name + "', ShortName ='" + talent.ShortName + "', Reknown = '" + talent.Reknown +"', Bio = '"+ talent.Bio+"', Img_Url = '"+ talent.Img_Url+ "' WHERE Id =" + id;
+            //SqlCommand cmd = new SqlCommand(query, con);
+            //con.Open();
+            //cmd.ExecuteNonQuery();
+            //con.Close();
             return Ok(talent);
         }
 
