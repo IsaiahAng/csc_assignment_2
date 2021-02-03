@@ -25,7 +25,6 @@ namespace csc_assignment_2.Areas.Identity.Data
         [PersonalData]
         [Column(TypeName = "nvarchar(100)")]
         public string LastPaid { get; set; }
-
         //public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         //{
         //    // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

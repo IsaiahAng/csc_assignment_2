@@ -33,6 +33,7 @@
             //console.log(searchField);
             var myExp = new RegExp(searchField, "i");
             $.getJSON(urlForJson, function (data) {
+
                 var output = '<ul class="searchresults">';
                 $.each(data, function (key, val) {
                     //for debug
@@ -113,6 +114,18 @@
             $('#btnDelete').click(function () {
 
                 $.ajax({
+                    url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents/?id=' + talentId,
+                    cache: false,
+                    type: 'Delete',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function () {
+                        $('#deleteModal').modal('hide');
+                        location.reload(true);
+                    }
+                }).done(function (data) {
+                    alert("Talent deleted successfully");
+                });
+                $.ajax({
                     url: 'http://localhost:62481/api/talents/' + talentId,
                     cache: false,
                     type: 'Delete',
@@ -143,7 +156,14 @@
                         Img_Url: $('#addImg').val(),
                     };
                     $.ajax({
-                        url: 'http://localhost:62481/api/talents/',
+                        url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents',
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(talent)
+                    });
+                    $.ajax({
+                        url: 'http://localhost:62481/api/talents',
                         type: 'post',
                         dataType: 'json',
                         contentType: 'application/json',
@@ -171,6 +191,13 @@
                         Bio: $('#editBio').val(),
                         Img_Url: $('#editImage').val(),
                     };
+                    var talent2 = {
+                        Name: $('#editName').val(),
+                        ShortName: $('#editShortName').val(),
+                        Reknown: $('#editReknown').val(),
+                        Bio: $('#editBio').val(),
+                        Img_Url: $('#editImage').val(),
+                    };
                     $.ajax({
                         url: 'http://localhost:62481/api/talents/' + talentId,
                         cache: false,
@@ -185,6 +212,21 @@
                     }).done(function (response) {
                         alert("Data Update Successfully");
                     });
+                    $.ajax({
+                        url: 'https://75wwmhpmya.execute-api.us-east-1.amazonaws.com/manageTalents/?id=' + talentId,
+                        cache: false,
+                        type: 'PUT',
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        data: JSON.stringify(talent2),
+                        success: function () {
+                            $('#editModal').modal('hide');
+                            location.reload(true);
+                        }
+                    }).done(function (response) {
+                        alert("Data Update Successfully");
+                    });
+
                 }
             });
 
