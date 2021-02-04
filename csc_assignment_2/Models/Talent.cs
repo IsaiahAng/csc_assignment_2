@@ -9,7 +9,7 @@ namespace csc_assignment_2.Models
     {
 
         public int Id { get; set; }
-        public int Fix_Id { get; set; }
+        //public int Fix_Id { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
         public string Reknown { get; set; }

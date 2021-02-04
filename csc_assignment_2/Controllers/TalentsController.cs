@@ -57,7 +57,7 @@ namespace csc_assignment_2.Controllers
             {
                 return BadRequest(new { message = "Talent cannot be empty!" });
             }
-            int i = talent.Fix_Id;
+            talent.Id = id;
             repository.Update(talent);
             //SqlConnection con = new SqlConnection(GetConStr.ConString());
             //string a = talent.Name;
@@ -73,12 +73,12 @@ namespace csc_assignment_2.Controllers
         public IActionResult DeleteTalent(int id)
         {
             repository.Remove(id);
-            SqlConnection con = new SqlConnection(GetConStr.ConString());
-            string query = "DELETE FROM Talent WHERE Id='"+id+"';";
-            SqlCommand cmd = new SqlCommand(query, con);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
+            //SqlConnection con = new SqlConnection(GetConStr.ConString());
+            //string query = "DELETE FROM Talent WHERE Id='"+id+"';";
+            //SqlCommand cmd = new SqlCommand(query, con);
+            //con.Open();
+            //cmd.ExecuteNonQuery();
+            //con.Close();
             return Ok(new { message = "Deleted " + id });
         }
     }
