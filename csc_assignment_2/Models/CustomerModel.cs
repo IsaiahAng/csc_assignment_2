@@ -18,7 +18,6 @@ namespace csc_assignment_2.Models
         //public string free { get; set; }
         public string premium { get; set; }
         public string customer_user_id { get; set; }
-
         public CustomerModel() { }
         public CustomerModel(string customer_id, string email, string subscription_status, string premium, string customer_user_id)
         {
@@ -60,10 +59,10 @@ namespace csc_assignment_2.Models
             con.Close();
             return i;
         }
-        public int LastPaid(string date, string customer_id)
+        public int LastPaid(string date, string id)
         {
             SqlConnection con = new SqlConnection(GetConStr.ConString());
-            string query = "UPDATE Customer set last_paid = '" + date + "' WHERE customer_id = '" + customer_id + "'";
+            string query = "UPDATE AspNetUsers set LastPaid = '" + date + "' WHERE Id = '" + id + "'";
             SqlCommand cmd = new SqlCommand(query, con);
             con.Open();
             int i = cmd.ExecuteNonQuery();
