@@ -29,7 +29,10 @@ namespace csc_assignment_2.Controllers
         public IActionResult Index()
         {
             ViewBag.userid = _userManager.GetUserId(HttpContext.User);
-            string plan = getUserData(_userManager.GetUserName(HttpContext.User));
+            string plan = getUserPlan(_userManager.GetUserName(HttpContext.User));
+            ViewBag.FirstName = getUserFirstName(_userManager.GetUserName(HttpContext.User));
+            ViewBag.LastName = getUserLastName(_userManager.GetUserName(HttpContext.User));
+            ViewBag.Email = getUserEmail(_userManager.GetUserName(HttpContext.User));
             // Store Current Logged user into DynamoDb
             //storeSession(_userManager.GetUserName(HttpContext.User));
             ViewBag.Message = plan;
@@ -61,7 +64,7 @@ namespace csc_assignment_2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public string getUserData(string email)
+        public string getUserPlan(string email)
         {
             SqlConnection con = new SqlConnection(GetConStr.ConString());
             string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
@@ -79,5 +82,88 @@ namespace csc_assignment_2.Controllers
             con.Close();
             return result;
         }
+        public string getUserFirstName(string email)
+        {
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
+            string result = "";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
+                result = dr["FirstName"].ToString();
+
+            }
+            con.Close();
+            return result;
+        }
+        public string getUserLastName(string email)
+        {
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
+            string result = "";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
+                result = dr["LastName"].ToString();
+
+            }
+            con.Close();
+            return result;
+        }
+        public string getUserEmail(string email)
+        {
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
+            string result = "";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
+                result = dr["Email"].ToString();
+
+            }
+            con.Close();
+            return result;
+        }
+        //public void storeSession(string email)
+        //{
+        //    var credentials = new BasicAWSCredentials("AKIAZ4FDJ5SPKEP54XUT", "/D5JtdPsUWBMbJ108z/jbiHR7S/z4bXnINxP2p61");
+
+        //    var client = new AmazonDynamoDBClient(credentials, RegionEndpoint.USEast1);
+        //    SqlConnection con = new SqlConnection(GetConStr.ConString());
+        //    string query = "SELECT * FROM Customer WHERE email = '" + email + "'";
+        //    SqlCommand cmd = new SqlCommand(query, con);
+        //    con.Open();
+        //    cmd.ExecuteNonQuery();
+        //    SqlDataReader dr = cmd.ExecuteReader();
+        //    while (dr.Read())
+        //    {
+        //        var request1 = new PutItemRequest
+        //        {
+        //            TableName = "Customer",
+        //            Item = new Dictionary<string, AttributeValue>
+        //            {
+        //                {"customer_id", new AttributeValue {S = dr["customer_id"].ToString()} },
+        //                {"email", new AttributeValue {S = dr["email"].ToString()} },
+        //                {"subscription_status", new AttributeValue {S = dr["subscription_status"].ToString()} },
+        //                {"charge_status", new AttributeValue {S = dr["charge_status"].ToString()} },
+        //                {"premium", new AttributeValue {S = dr["premium"].ToString()} },
+        //                {"customer_user_id", new AttributeValue {S = dr["customer_user_id"].ToString()} }
+        //            }
+        //        };
+        //        client.PutItemAsync(request1);
+        //    }
+        //}
     }
 }

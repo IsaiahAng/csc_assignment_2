@@ -15,6 +15,33 @@
     <script>
 
         $(document).ready(function () {
+            @{string firstName = ViewBag.FirstName;
+                        }
+
+            console.log("@firstName");
+
+
+            var customerDetails = {
+                customerId: "@ViewBag.userid",
+                FirstName: "@ViewBag.FirstName",
+                LastName: "@ViewBag.LastName",
+                Email: "@ViewBag.Email",
+                Plan: "@ViewBag.Message",
+                
+            };
+            $.ajax({
+                url: 'https://hi8o93iw11.execute-api.us-east-1.amazonaws.com/dev/addcustomer',
+                cache: false,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(customerDetails),
+                crossDomain: true,
+                
+            }).done(function (response) {
+                
+            });
+
             $('#search').keyup(function () {
             //get data from json file
             //var urlForJson = "data.json";
