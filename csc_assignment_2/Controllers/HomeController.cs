@@ -27,7 +27,10 @@ namespace csc_assignment_2.Controllers
         public IActionResult Index()
         {
             ViewBag.userid = _userManager.GetUserId(HttpContext.User);
-            string plan = getUserData(_userManager.GetUserName(HttpContext.User));
+            string plan = getUserPlan(_userManager.GetUserName(HttpContext.User));
+            ViewBag.FirstName = getUserFirstName(_userManager.GetUserName(HttpContext.User));
+            ViewBag.LastName = getUserLastName(_userManager.GetUserName(HttpContext.User));
+            ViewBag.Email = getUserEmail(_userManager.GetUserName(HttpContext.User));
             // Store Current Logged user into DynamoDb
             //storeSession(_userManager.GetUserName(HttpContext.User));
             ViewBag.Message = plan;
@@ -59,7 +62,7 @@ namespace csc_assignment_2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public string getUserData(string email)
+        public string getUserPlan(string email)
         {
             SqlConnection con = new SqlConnection(GetConStr.ConString());
             string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
@@ -72,6 +75,60 @@ namespace csc_assignment_2.Controllers
             {
                 System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
                 result = dr["SubPlan"].ToString();
+
+            }
+            con.Close();
+            return result;
+        }
+        public string getUserFirstName(string email)
+        {
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
+            string result = "";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
+                result = dr["FirstName"].ToString();
+
+            }
+            con.Close();
+            return result;
+        }
+        public string getUserLastName(string email)
+        {
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
+            string result = "";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
+                result = dr["LastName"].ToString();
+
+            }
+            con.Close();
+            return result;
+        }
+        public string getUserEmail(string email)
+        {
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
+            string result = "";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
+                result = dr["Email"].ToString();
 
             }
             con.Close();
