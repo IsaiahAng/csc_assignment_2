@@ -395,7 +395,7 @@
         });
         AWS.config.region = 'us-east-1';
 
-        var bucketName = 'csc-assignment-1'
+        var bucketName = 'csc-talents-storage'
 
         var s3 = new AWS.S3({
             params: { Bucket: bucketName }
@@ -560,7 +560,7 @@
         });
         AWS.config.region = 'us-east-1';
 
-        var bucketName = 'csc-assignment-1'
+        var bucketName = 'csc-talents-storage'
 
         var s3 = new AWS.S3({
             params: { Bucket: bucketName }
@@ -618,14 +618,14 @@
     <p>Enter the name or info about a speaker</p>
     <input type="search" name="search" id="search" placeholder="name or info" />
     <button id="AddNewTalent" type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><span class="glyphicon glyphicon-plus"></span> Add</button>
-    @*<input type="file" name="file" id="file" value="dataFile" required="">*@
-    @*<button onclick="uploadFile()">Upload to S3</button>*@
-    @*<div id="UploadPhoto" class="upload-photo">
-        <input type="file" name="file" id="file" value="dataFile" onchange="uploadImage()">
+    @*<input type="file" name="file" id="file" value="dataFile" required="">
+    <button onclick="uploadFile()">Upload to S3</button>*@
+    <div id="UploadPhoto" class="upload-photo">
+        <input type="file" name="file" id="testFile" value="dataFile" onchange="uploadImage()">
         <div class="photo-container">
-            <img class="photo" src="" alt="Image preview">
+            <img class="photo" src="" id="preview" alt="Image preview">
         </div>
-    </div>*@
+    </div>
     <div class="analysis" id="analysis">
     </div>
 </div>
@@ -636,8 +636,9 @@
 
 <script>
     function uploadImage() {
-        var preview = document.querySelector('img');
-        var file = document.querySelector('input[type=file]').files[0];
+        console.log('open')
+        var preview = document.getElementById("preview");
+        var file = document.getElementById('testFile').files[0];
         var reader = new FileReader();
         reader.addEventListener("load", function () {
             preview.src = reader.result;
@@ -646,6 +647,7 @@
             validateHuman(imageData)
         }, false);
         if (file) {
+            console.log(file)
             reader.readAsDataURL(file);
             preview.style.display = "inherit";
         }
@@ -653,7 +655,7 @@
 
     async function validateHuman(base64) {
         $(".analysis").empty();
-
+        console.log(base64)
         axios.post("https://api.clarifai.com/v2/models/d02b4508df58432fbb84e800597b8959/outputs", JSON.stringify({
             inputs: [{
                 data: { image: { base64: base64 } }
@@ -707,7 +709,7 @@
             `<h4> Uploading... </h4>`
         )
 
-        var bucketName = 'csc-assignment-1'
+        var bucketName = 'csc-talents-storage'
 
         var s3 = new AWS.S3({
             params: { Bucket: bucketName }
