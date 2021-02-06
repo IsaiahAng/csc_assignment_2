@@ -33,6 +33,7 @@ namespace csc_assignment_2.Controllers
             ViewBag.FirstName = getUserFirstName(_userManager.GetUserName(HttpContext.User));
             ViewBag.LastName = getUserLastName(_userManager.GetUserName(HttpContext.User));
             ViewBag.Email = getUserEmail(_userManager.GetUserName(HttpContext.User));
+            ViewBag.LastPaid = getUserLastPaid(_userManager.GetUserName(HttpContext.User));
             // Store Current Logged user into DynamoDb
             //storeSession(_userManager.GetUserName(HttpContext.User));
             ViewBag.Message = plan;
@@ -131,6 +132,24 @@ namespace csc_assignment_2.Controllers
             {
                 System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
                 result = dr["Email"].ToString();
+
+            }
+            con.Close();
+            return result;
+        }
+        public string getUserLastPaid(string email)
+        {
+            SqlConnection con = new SqlConnection(GetConStr.ConString());
+            string query = "SELECT * FROM AspNetUsers WHERE Email = '" + email + "'";
+            string result = "";
+            SqlCommand cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                System.Diagnostics.Debug.WriteLine("DataReader: " + dr);
+                result = dr["LastPaid"].ToString();
 
             }
             con.Close();

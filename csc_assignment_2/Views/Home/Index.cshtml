@@ -22,15 +22,16 @@
 
 
             var customerDetails = {
-                customerId: "@ViewBag.userid",
+                Id: "@ViewBag.userid",
                 FirstName: "@ViewBag.FirstName",
                 LastName: "@ViewBag.LastName",
                 Email: "@ViewBag.Email",
                 Plan: "@ViewBag.Message",
+                LastPaid: "@ViewBag.LastPaid"
                 
             };
             $.ajax({
-                url: 'https://hi8o93iw11.execute-api.us-east-1.amazonaws.com/dev/addcustomer',
+                url: 'https://fv97mc4ina.execute-api.us-east-1.amazonaws.com/customer',
                 cache: false,
                 type: 'POST',
                 dataType: 'json',
