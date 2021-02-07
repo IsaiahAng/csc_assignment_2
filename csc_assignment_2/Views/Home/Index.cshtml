@@ -151,8 +151,10 @@
                     type: 'Delete',
                     contentType: 'application/json; charset=utf-8',
                     success: function () {
-                        $('#deleteModal').modal('hide');
-                        location.reload(true);
+                        alert("Talent deleted successfully");
+                        setTimeout(function () {
+                            window.location.reload(false)
+                        }, [1000])
                     }
                 }).done(function (data) {
                     alert("Talent deleted successfully");
@@ -163,8 +165,10 @@
                     type: 'Delete',
                     contentType: 'application/json; charset=utf-8',
                     success: function () {
-                        $('#deleteModal').modal('hide');
-                        location.reload(true);
+                        setTimeout(function () {
+                            alert("Talent deleted successfully");
+                            window.location.reload(false)
+                        }, [1000])
                     }
                 }).done(function (data) {
                     alert("Talent deleted successfully");
@@ -192,14 +196,26 @@
                         type: 'post',
                         dataType: 'json',
                         contentType: 'application/json',
-                        data: JSON.stringify(talent)
+                        data: JSON.stringify(talent),
+                        success: function () {
+                            alert("Talent created successfully");
+                            setTimeout(function () {
+                                window.location.reload(false)
+                            }, [1000])
+                        }
                     });
                     $.ajax({
                         url: 'http://ec2-3-82-176-118.compute-1.amazonaws.com/api/talents',
                         type: 'post',
                         dataType: 'json',
                         contentType: 'application/json',
-                        data: JSON.stringify(talent)
+                        data: JSON.stringify(talent),
+                        success: function () {
+                            alert("Talent created successfully");
+                            setTimeout(function () {
+                                window.location.reload(false)
+                            }, [1000])
+                        }
                     });
                 }
             });
@@ -238,8 +254,10 @@
                         contentType: 'application/json; charset=utf-8',
                         data: JSON.stringify(talent),
                         success: function () {
-                            $('#editModal').modal('hide');
-                            location.reload(true);
+                            alert("Data Update dSuccessfully");
+                            setTimeout(function () {
+                                window.location.reload(false)
+                            }, [1000])
                         }
                     }).done(function (response) {
                         alert("Data Update Successfully");
@@ -252,11 +270,13 @@
                         contentType: 'application/json; charset=utf-8',
                         data: JSON.stringify(talent2),
                         success: function () {
-                            $('#editModal').modal('hide');
-                            location.reload(true);
+                            alert("Data Updated Successfully");
+                            setTimeout(function () {
+                                window.location.reload(false)
+                            }, [1000])
                         }
                     }).done(function (response) {
-                        alert("Data Update Successfully");
+                        alert("Data Updated Successfully");
                     });
 
                 }
